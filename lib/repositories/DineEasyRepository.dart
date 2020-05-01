@@ -173,7 +173,8 @@ class DineEasyRepository extends BaseRepository {
             name: "Stepan Martinek",
             nrOfPeople: 2,
             phoneNr: "+45000000",
-            state: BookingState.confirmed));
+            state: BookingState.confirmed,
+            restaurantName: "Restaurant $i"));
       }
       return bookings;
     });

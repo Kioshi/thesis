@@ -20,6 +20,7 @@ class Booking {
   final int discount;
   final String name;
   final String phoneNr;
+  final String restaurantName;
 
   final BookingState state;
 
@@ -32,9 +33,8 @@ class Booking {
       this.discount,
       this.name,
       this.phoneNr,
-      this.state
-      //this.restaurant
-      });
+      this.state,
+      this.restaurantName});
 
   factory Booking.fromJson(Map<String, dynamic> json) =>
       _$BookingFromJson(json);

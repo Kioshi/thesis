@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 
 class DEBottomNavigationBar extends StatelessWidget {
   int _currentIndex;
+  bool backOnSameIndex;
 
-  DEBottomNavigationBar(this._currentIndex);
+  DEBottomNavigationBar(this._currentIndex, {this.backOnSameIndex = false});
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: (index) {
-        if (index == _currentIndex) return;
-        print("New page $index");
+        if (index == _currentIndex) {
+          if (backOnSameIndex) {
+            Navigator.pop(context);
+          }
+          return;
+        }
         switch (index) {
           case 0:
             /*Navigator.push(

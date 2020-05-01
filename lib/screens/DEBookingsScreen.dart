@@ -3,7 +3,10 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:thesis/models/Booking.dart';
 import 'package:thesis/repositories/DineEasyRepository.dart';
+import 'package:thesis/widgets/BookingStateWidget.dart';
 import 'package:thesis/widgets/DEBottomNavigationBar.dart';
+
+import 'DEBookingScreen.dart';
 
 class DEBookingsScreen extends StatefulWidget {
   @override
@@ -69,16 +72,15 @@ class DEBookingsState extends State<StatefulWidget> {
           itemBuilder: (context, i) {
             final booking = data[i];
             return ListTile(
-              trailing: Text(booking.state.toString().substring(13)),
-              title: Text(booking.name),
-              subtitle: Text(booking.date.toString()),
               leading: Text(booking.id.toString()),
+              title: Text(booking.restaurantName),
+              subtitle: Text(booking.date.toString()),
+              trailing: BookingStateWidget(booking.state),
               onTap: () {
-                /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DEBookingScreen(booking)));*/
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DEBookingScreen(booking)));
               },
             );
           },
