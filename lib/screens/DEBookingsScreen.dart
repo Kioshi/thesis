@@ -9,6 +9,8 @@ import 'package:thesis/widgets/DEBottomNavigationBar.dart';
 import 'DEBookingScreen.dart';
 
 class DEBookingsScreen extends StatefulWidget {
+  static const routeName = '/bookings';
+
   @override
   State<StatefulWidget> createState() {
     return DEBookingsState();
@@ -77,10 +79,11 @@ class DEBookingsState extends State<StatefulWidget> {
               subtitle: Text(booking.date.toString()),
               trailing: BookingStateWidget(booking.state),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DEBookingScreen(booking)));
+                Navigator.pushNamed(
+                  context,
+                  DEBookingScreen.routeName,
+                  arguments: booking,
+                );
               },
             );
           },

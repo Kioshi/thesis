@@ -4,16 +4,19 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:thesis/models/Availability.dart';
 import 'package:thesis/models/Booking.dart';
 import 'package:thesis/models/Filters.dart';
 import 'package:thesis/models/Restaurant.dart';
 import 'package:thesis/models/ToggableItem.dart';
+import 'package:thesis/models/User.dart';
 
 import 'BaseRepository.dart';
 
 class DineEasyRepository extends BaseRepository {
   static const String _baseUrl = 'http://localhost:8888';
+  final LocalStorage _storage;
 
   final http.Client _httpClient;
 
@@ -26,7 +29,8 @@ class DineEasyRepository extends BaseRepository {
   int next(int min, int max) => min + _random.nextInt(max - min);
 
   DineEasyRepository({http.Client httpClient})
-      : _httpClient = httpClient ?? http.Client();
+      : _httpClient = httpClient ?? http.Client(),
+        _storage = LocalStorage('users.json');
 
   @override
   void dispose() {
@@ -178,5 +182,23 @@ class DineEasyRepository extends BaseRepository {
       }
       return bookings;
     });
+  }
+
+  Future<User> getUser() async {
+    await _storage.ready;
+    Map<String, dynamic> data = _storage.getItem('user');
+    User user;
+    if (data == null) {
+      user = User(id: 1, name: "Štěpán Martínek", phoneNr: "+4500000000");
+      await _storage.setItem("user", user);
+    } else {
+      user = User.fromJson(data);
+    }
+    return User.fromJson(_storage.getItem('user'));
+  }
+
+  Future<void> updateUser(User user) async {
+    await _storage.ready;
+    await _storage.setItem("user", user.toJson());
   }
 }

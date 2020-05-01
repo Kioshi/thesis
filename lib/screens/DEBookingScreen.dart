@@ -3,29 +3,13 @@ import 'package:thesis/models/Booking.dart';
 import 'package:thesis/widgets/BookingStateWidget.dart';
 import 'package:thesis/widgets/DEBottomNavigationBar.dart';
 
-class DEBookingScreen extends StatefulWidget {
-  DEBookingScreen(this.booking, {Key key}) : super(key: key);
-
-  Booking booking;
-
-  @override
-  _DEBookingScreenState createState() => _DEBookingScreenState(booking);
-}
-
-class BoolWrapper {
-  bool value;
-  BoolWrapper(this.value);
-}
-
-class _DEBookingScreenState extends State<DEBookingScreen> {
-  Booking booking;
-
-  _DEBookingScreenState(this.booking);
-
-  BoolWrapper showPopUp = BoolWrapper(false);
+class DEBookingScreen extends StatelessWidget {
+  static const routeName = '/booking';
 
   @override
   Widget build(BuildContext context) {
+    Booking booking = ModalRoute.of(context).settings.arguments as Booking;
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Booking info"),

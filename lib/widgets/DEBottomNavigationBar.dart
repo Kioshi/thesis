@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:thesis/screens/DEBookingsScreen.dart';
+import 'package:thesis/screens/DERestaurantsScreen.dart';
+import 'package:thesis/screens/DEUserScreen.dart';
 
 class DEBottomNavigationBar extends StatelessWidget {
   int _currentIndex;
@@ -20,22 +22,16 @@ class DEBottomNavigationBar extends StatelessWidget {
         }
         switch (index) {
           case 0:
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DEBookingsScreen()));*/
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                DEBookingsScreen.routeName, (Route<dynamic> route) => false);
             break;
           case 1:
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DERestaurantsScreen()));*/
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                DERestaurantsScreen.routeName, (Route<dynamic> route) => false);
             break;
           case 2:
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DEUser()));*/
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                DEUserScreen.routeName, (Route<dynamic> route) => false);
             break;
         }
       },
