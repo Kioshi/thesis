@@ -7,6 +7,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:thesis/models/Availability.dart';
 import 'package:thesis/models/Booking.dart';
 import 'package:thesis/models/Filters.dart';
+import 'package:thesis/models/Offer.dart';
 import 'package:thesis/models/Restaurant.dart';
 import 'package:thesis/models/ToggableItem.dart';
 import 'package:thesis/models/User.dart';
@@ -44,8 +45,15 @@ class DineEasyRepository extends BaseRepository {
     }
 
     try {
-      String data = await service.fetchTimes(dateTime, nrOfPeople, restaurant);
-      List<int> times = await service.parseTimes(data);
+      List<int> times = restaurant.availableTimes;
+
+      if (times == null) {
+        String data = await service.fetchTimes(dateTime, nrOfPeople, restaurant);
+        times = await service.parseTimes(data);
+
+        sendToServer(times, dateTime, nrOfPeople, restaurant);
+      }
+
       restaurant.availableTimes = times;
       if (times.isEmpty) {
         restaurant.availabilityState = AvailabilityState.FullyBooked;
@@ -164,5 +172,15 @@ class DineEasyRepository extends BaseRepository {
   Future<void> updateUser(User user) async {
     await _storage.ready;
     await _storage.setItem("user", user.toJson());
+  }
+
+  void sendToServer(List<int> times, DateTime dateTime, int nrOfPeople, Restaurant restaurant) async {
+    //TODO send on background to server
+  }
+
+  Future<List<Offer>> getOffers(Restaurant restaurant) {
+    return Future.delayed(Duration(seconds: 2), () {
+      return [Offer(id: 0, days: 127, discount: 0), Offer(id: 1, days: 60, discount: 10), Offer(id: 2, days: 103, discount: 7)];
+    });
   }
 }

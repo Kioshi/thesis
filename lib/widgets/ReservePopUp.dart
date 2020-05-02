@@ -25,8 +25,7 @@ class ReservePupUpState extends State<ReservePupUp> {
   String confirmedNumber = '';
   final _dineEasyRepository = DineEasyRepository();
 
-  void onPhoneNumberChange(
-      String number, String internationalizedPhoneNumber, String isoCode) {
+  void onPhoneNumberChange(String number, String internationalizedPhoneNumber, String isoCode) {
     print(number);
     setState(() {
       phoneNumber = number;
@@ -34,8 +33,7 @@ class ReservePupUpState extends State<ReservePupUp> {
     });
   }
 
-  onValidPhoneNumber(
-      String number, String internationalizedPhoneNumber, String isoCode) {
+  onValidPhoneNumber(String number, String internationalizedPhoneNumber, String isoCode) {
     setState(() {
       visible = true;
       confirmedNumber = internationalizedPhoneNumber;
@@ -45,7 +43,6 @@ class ReservePupUpState extends State<ReservePupUp> {
   Restaurant _restaurant;
   TextEditingController _nrOfPeopleController;
   TextEditingController _nameController;
-  List<int> data = [60, 300, 652, 654, 1200, 1300, 2000];
   int selectedTime;
 
   Future<Booking> reservationFuture = null;
@@ -55,7 +52,7 @@ class ReservePupUpState extends State<ReservePupUp> {
   @override
   void initState() {
     super.initState();
-    selectedTime = data.first;
+    selectedTime = _restaurant.availableTimes.first;
     _nrOfPeopleController = TextEditingController(text: '2');
     _nameController = TextEditingController(text: "Jmeno");
   }
@@ -87,8 +84,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                   decoration: InputDecoration(labelText: "Number of people"),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter
-                        .digitsOnly //TODO add min max formater
+                    WhitelistingTextInputFormatter.digitsOnly //TODO add min max formater
                   ], // Only numbers can be entered
                   controller: _nrOfPeopleController,
                 ),
@@ -96,7 +92,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                   decoration: InputDecoration(labelText: "Time of reservation"),
                   value: selectedTime,
                   //isExpanded: true,
-                  items: data
+                  items: _restaurant.availableTimes
                       .map((e) => DropdownMenuItem(
                             value: e,
                             child: Align(
@@ -112,9 +108,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                       selectedTime = value;
                     });
                   },
-                  hint: Align(
-                      alignment: FractionalOffset.center,
-                      child: Text("Select city")),
+                  hint: Align(alignment: FractionalOffset.center, child: Text("Select city")),
                 ),
               ],
             );
@@ -124,8 +118,7 @@ class ReservePupUpState extends State<ReservePupUp> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation(Theme.of(context).accentColor),
+                  valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
                 );
               }
               if (snapshot.hasError) {
@@ -149,11 +142,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                 child: Text("Reserve"),
                 onPressed: () {
                   setState(() {
-                    reservationFuture = _dineEasyRepository.makeReservation(
-                        phoneNumber,
-                        _nameController.value,
-                        _nrOfPeopleController.value,
-                        selectedTime);
+                    reservationFuture = _dineEasyRepository.makeReservation(phoneNumber, _nameController.value, _nrOfPeopleController.value, selectedTime);
                     //TODO solve case when widget is closed
 
                     reservationFuture.whenComplete(() {
