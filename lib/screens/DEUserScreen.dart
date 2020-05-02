@@ -51,16 +51,12 @@ class DEUserScreenState extends State<DEUserScreen> {
                               child: TextFormField(
                                 enabled: _enableEditting,
                                 controller: _phoneNrController,
-                                decoration:
-                                    InputDecoration(labelText: "Phone Number"),
+                                decoration: InputDecoration(labelText: "Phone Number"),
                               ))),
                       FlatButton(
                         child: Text(_enableEditting ? "Save" : "Edit"),
                         onPressed: () async {
-                          User u = User(
-                              id: user.id,
-                              name: _nameController.text,
-                              phoneNr: _phoneNrController.text);
+                          User u = User(id: user.id, name: _nameController.text, phoneNr: _phoneNrController.text);
                           await _dineEasyRepository.updateUser(u);
                           setState(() {
                             user = u;

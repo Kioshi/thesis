@@ -4,7 +4,6 @@ part 'User.g.dart';
 
 @JsonSerializable()
 class User {
-  @override
   final int id;
   final String name;
   final String phoneNr;

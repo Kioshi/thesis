@@ -1,6 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:thesis/models/Availability.dart';
 import 'package:thesis/models/Booking.dart';
 
+part 'Restaurant.g.dart';
+
+@JsonSerializable()
 class Restaurant {
   int id;
   String name;
@@ -45,56 +49,6 @@ class Restaurant {
       this.bookingType,
       this.availability});
 
-  Restaurant.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    address = json['address'];
-    type = json['type'];
-    postalCode = json['postalCode'];
-    website = json['website'];
-    menuURL = json['menuURL'];
-    description = json['description'];
-    publicEmail = json['publicEmail'];
-    publicPhone = json['publicPhone'];
-    publicPhoneCountryCode = json['publicPhoneCountryCode'];
-    city = json['city'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    capacity = json['capacity'];
-    foodCategories = json['foodCategories'].cast<String>();
-
-    availability = json['availability'] != null
-        ? new Availability.fromJson(json['availability'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['address'] = this.address;
-    data['type'] = this.type;
-    data['postalCode'] = this.postalCode;
-    data['website'] = this.website;
-    data['menuURL'] = this.menuURL;
-    data['description'] = this.description;
-    data['publicEmail'] = this.publicEmail;
-    data['publicPhone'] = this.publicPhone;
-    data['publicPhoneCountryCode'] = this.publicPhoneCountryCode;
-    data['city'] = this.city;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['capacity'] = this.capacity;
-    data['foodCategories'] = this.foodCategories;
-
-    data['bookingType'] = this.bookingType.toString();
-
-    if (this.availability != null) {
-      data['availability'] = this.availability.toJson();
-    }
-    return data;
-  }
-
   Restaurant.test(int i) {
     this.id = i;
     this.name = "Resturant $i";
@@ -109,4 +63,8 @@ class Restaurant {
       SpecialDay(dates: ["2020-04-03"], open: true, openFrom: 0, openTill: 1440)
     ]);
   }
+
+  factory Restaurant.fromJson(Map<String, dynamic> json) => _$RestaurantFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RestaurantToJson(this);
 }

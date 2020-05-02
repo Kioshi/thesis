@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,22 +10,15 @@ import 'package:thesis/models/Filters.dart';
 import 'package:thesis/models/Restaurant.dart';
 import 'package:thesis/models/ToggableItem.dart';
 import 'package:thesis/models/User.dart';
+import 'package:thesis/modules/BaseService.dart';
+import 'package:thesis/modules/ServiceFactory.dart';
 
 import 'BaseRepository.dart';
 
 class DineEasyRepository extends BaseRepository {
-  static const String _baseUrl = 'http://localhost:8888';
   final LocalStorage _storage;
 
   final http.Client _httpClient;
-
-  final _random = new Random();
-
-  /**
-   * Generates a positive random integer uniformly distributed on the range
-   * from [min], inclusive, to [max], exclusive.
-   */
-  int next(int min, int max) => min + _random.nextInt(max - min);
 
   DineEasyRepository({http.Client httpClient})
       : _httpClient = httpClient ?? http.Client(),
@@ -38,49 +30,40 @@ class DineEasyRepository extends BaseRepository {
   }
 
   @override
-  Future<AvailabilityState> getRestaurantAvailability(
-      {DateTime dateTime, TimeOfDay timeOfDay, Restaurant restaurant}) async {
+  Future<AvailabilityState> getRestaurantAvailability({DateTime dateTime, TimeOfDay timeOfDay, Restaurant restaurant, int nrOfPeople}) async {
     int time = timeOfDay.hour * 60 + timeOfDay.minute;
-    restaurant.availabilityState =
-        isOpenAtDateAndTime(restaurant.availability, dateTime, time);
+    restaurant.availabilityState = isOpenAtDateAndTime(restaurant.availability, dateTime, time);
 
-    if (restaurant.availabilityState == AvailabilityState.Closed ||
-        restaurant.bookingType == BookingTypes.DineEasyCallBooking ||
-        restaurant.bookingType == BookingTypes.NoBooking) {
+    if (restaurant.availabilityState == AvailabilityState.Closed) {
       return restaurant.availabilityState;
     }
 
-    //TODO move to factory based on reservation type
-    //String requestUrl = '$_baseUrl/restaurants/${restaurant.id}/times';
+    BaseService service = ServicesFactory.getService(restaurant.bookingType);
+    if (service == null) {
+      return restaurant.availabilityState;
+    }
+
     try {
-      //final response = await _httpClient.get(requestUrl);
-      final response =
-          await Future.delayed(Duration(milliseconds: next(500, 5000)), () {
-        return http.Response("[100,256,354,68,549]", 200);
-      });
-      if (response.statusCode == 200) {
-        List<int> data = json.decode(response.body).cast<int>();
-        restaurant.availableTimes = data;
-        if (data.isEmpty) {
-          restaurant.availabilityState = AvailabilityState.FullyBooked;
-        } else if (time != null) {
-          int timeDiff = 24 * 60;
-          for (int availableTime in data) {
-            int abs = (availableTime - time).abs();
-            if (abs <= timeDiff) {
-              timeDiff = abs;
-              break;
-            }
+      String data = await service.fetchTimes(dateTime, nrOfPeople, restaurant);
+      List<int> times = await service.parseTimes(data);
+      restaurant.availableTimes = times;
+      if (times.isEmpty) {
+        restaurant.availabilityState = AvailabilityState.FullyBooked;
+      } else if (time != null) {
+        int timeDiff = 24 * 60;
+        for (int availableTime in times) {
+          int abs = (availableTime - time).abs();
+          if (abs <= timeDiff) {
+            timeDiff = abs;
+            break;
           }
-          if (timeDiff < 20) {
-            restaurant.availabilityState = AvailabilityState.TimeSlotAvailable;
-          } else if (timeDiff < 60) {
-            restaurant.availabilityState =
-                AvailabilityState.TimeSlotAlternativePossible;
-          } else {
-            restaurant.availabilityState =
-                AvailabilityState.TimeSlotUnavailable;
-          }
+        }
+        if (timeDiff < 20) {
+          restaurant.availabilityState = AvailabilityState.TimeSlotAvailable;
+        } else if (timeDiff < 60) {
+          restaurant.availabilityState = AvailabilityState.TimeSlotAlternativePossible;
+        } else {
+          restaurant.availabilityState = AvailabilityState.TimeSlotUnavailable;
         }
       }
       return restaurant.availabilityState;
@@ -89,15 +72,12 @@ class DineEasyRepository extends BaseRepository {
     }
   }
 
-  AvailabilityState isOpenAtDateAndTime(
-      Availability availability, DateTime dateTime, int time) {
+  AvailabilityState isOpenAtDateAndTime(Availability availability, DateTime dateTime, int time) {
     AvailabilityState state = AvailabilityState.Closed;
 
     for (NormalDay day in availability.normalDays) {
       if (day.daysMask & (dateTime.weekday + 1) != 0) {
-        state = day.openFrom < time && day.openTill > time
-            ? AvailabilityState.Open
-            : AvailabilityState.Closed;
+        state = day.openFrom < time && day.openTill > time ? AvailabilityState.Open : AvailabilityState.Closed;
         break;
       }
     }
@@ -105,9 +85,7 @@ class DineEasyRepository extends BaseRepository {
     for (SpecialDay day in availability.specialDays) {
       for (String date in day.dates) {
         if (date == DateFormat("yyyy-MM-dd").format(dateTime)) {
-          return day.open && day.openFrom < time && day.openTill > time
-              ? AvailabilityState.Open
-              : AvailabilityState.Closed;
+          return day.open && day.openFrom < time && day.openTill > time ? AvailabilityState.Open : AvailabilityState.Closed;
         }
       }
     }
@@ -119,17 +97,13 @@ class DineEasyRepository extends BaseRepository {
         Duration(seconds: 3),
         () => Filters(
             locations: ["Odense", "Plzeň"],
-            foodCategories: ["Thai", "Chineese", "Danish", "French"]
-                .map((item) => TogglableItem(item))
-                .toList(),
+            foodCategories: ["Thai", "Chineese", "Danish", "French"].map((item) => TogglableItem(item)).toList(),
             prices: [
               "\$",
               "\$\$",
               "\$\$\$",
             ].map((item) => TogglableItem(item)).toList(),
-            tags: ["Takeout", "Gardern"]
-                .map((item) => TogglableItem(item))
-                .toList()));
+            tags: ["Takeout", "Gardern"].map((item) => TogglableItem(item)).toList()));
   }
 
   Future<List<Restaurant>> getRestaurants(String location, Filters filters) {
@@ -142,27 +116,17 @@ class DineEasyRepository extends BaseRepository {
     });
   }
 
-  Future<Booking> makeReservation(String phoneNumber, TextEditingValue value,
-      TextEditingValue value2, int selectedTime) {
+  Future<Booking> makeReservation(String phoneNumber, TextEditingValue value, TextEditingValue value2, int selectedTime) {
     return Future.delayed(Duration(seconds: 1), () {
-      return Booking(
-          id: 1,
-          date: DateTime.now(),
-          nrOfPeople: 2,
-          discount: 15,
-          name: "Stepan",
-          phoneNr: "+4550207092");
+      return Booking(id: 1, date: DateTime.now(), nrOfPeople: 2, discount: 15, name: "Stepan", phoneNr: "+4550207092");
     });
   }
 
   Future<List<Booking>> getBookings() async {
     try {
-      final response = await _httpClient.get(
-          "https://my-json-server.typicode.com/kioshi/thesis-mockup/bookings");
+      final response = await _httpClient.get("https://my-json-server.typicode.com/kioshi/thesis-mockup/bookings");
       if (response.statusCode == 200) {
-        return (json.decode(response.body) as List)
-            .map((i) => Booking.fromJson(i))
-            .toList();
+        return (json.decode(response.body) as List).map((i) => Booking.fromJson(i)).toList();
       }
     } catch (ex) {
       print(ex);
@@ -174,7 +138,7 @@ class DineEasyRepository extends BaseRepository {
             id: i,
             discount: i + 10,
             date: DateTime.now(),
-            name: "Stepan Martinek",
+            name: "Štepan Martinek",
             nrOfPeople: 2,
             phoneNr: "+45000000",
             state: BookingState.confirmed,
