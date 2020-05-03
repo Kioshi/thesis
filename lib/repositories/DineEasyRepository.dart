@@ -30,16 +30,15 @@ class DineEasyRepository extends BaseRepository {
     _httpClient.close();
   }
 
-  @override
-  Future<AvailabilityState> getRestaurantAvailability({DateTime dateTime, TimeOfDay timeOfDay, Restaurant restaurant, int nrOfPeople}) async {
-    int time = timeOfDay.hour * 60 + timeOfDay.minute;
-    restaurant.availabilityState = isOpenAtDateAndTime(restaurant.availability, dateTime, time);
+  Future<AvailabilityState> getRestaurantAvailability({DateTime dayAndTime, TimeOfDay timeOfDay, Restaurant restaurant, int nrOfPeople}) async {
+    int time = dayAndTime.hour * 60 + dayAndTime.minute;
+    restaurant.availabilityState = isOpenAtDateAndTime(restaurant.availability, dayAndTime, time);
 
     if (restaurant.availabilityState == AvailabilityState.Closed) {
       return restaurant.availabilityState;
     }
 
-    BaseService service = ServicesFactory.getService(restaurant.bookingType);
+    BaseService service = ServicesFactory.getService(restaurant.bookingType, client: _httpClient);
     if (service == null) {
       return restaurant.availabilityState;
     }
@@ -48,10 +47,10 @@ class DineEasyRepository extends BaseRepository {
       List<int> times = restaurant.availableTimes;
 
       if (times == null) {
-        String data = await service.fetchTimes(dateTime, nrOfPeople, restaurant);
+        String data = await service.fetchTimes(dayAndTime, nrOfPeople, restaurant);
         times = await service.parseTimes(data);
 
-        sendToServer(times, dateTime, nrOfPeople, restaurant);
+        sendToServer(times, dayAndTime, nrOfPeople, restaurant);
       }
 
       restaurant.availableTimes = times;

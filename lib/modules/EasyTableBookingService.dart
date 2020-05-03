@@ -18,7 +18,7 @@ class EasyTableBookingService extends BaseService {
   }
 
   @override
-  Future<List<int>> parseTimes(String times) {
-    return json.decode(times).cast<int>();
+  Future<List<int>> parseTimes(String times) async {
+    return (json.decode(times) as List).map((i) => int.parse(i.toString().trim())).toList();
   }
 }
