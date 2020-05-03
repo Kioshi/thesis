@@ -52,11 +52,12 @@ class Restaurant {
       this.availability});
 
   Restaurant.test(int i) {
+    Random random = Random();
     this.id = i;
     this.name = "Resturant $i";
     this.address = "Addr $i";
     this.type = "Type $i";
-    this.bookingType = BookingTypes.EasyTableBooking;
+    this.bookingType = random.nextInt(1) == 0 ? BookingTypes.EasyTableBooking : BookingTypes.DineEasyCallBooking;
     this.availabilityState = AvailabilityState.Open;
     this.availability = Availability(normalDays: [
       NormalDay(daysMask: 31, openFrom: 600, openTill: 1800, open: true),
@@ -65,9 +66,8 @@ class Restaurant {
       SpecialDay(dates: ["2020-04-03"], open: true, openFrom: 0, openTill: 1440)
     ]);
     if (i % 5 == 0) {
-      Random random = Random();
       this.availableTimes = List.generate(20, (i) {
-        return random.nextInt(1800) - 600;
+        return 600 + random.nextInt(1200);
       });
     }
 

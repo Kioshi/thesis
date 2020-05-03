@@ -4,6 +4,7 @@ import 'package:international_phone_input/international_phone_input.dart';
 import 'package:thesis/models/Booking.dart';
 import 'package:thesis/models/Restaurant.dart';
 import 'package:thesis/repositories/DineEasyRepository.dart';
+import 'package:thesis/widgets/DEDropDownButton.dart';
 
 class ReservePupUp extends StatefulWidget {
   Restaurant _restaurant;
@@ -20,7 +21,6 @@ class ReservePupUp extends StatefulWidget {
 class ReservePupUpState extends State<ReservePupUp> {
   String phoneNumber;
   String phoneIsoCode;
-  bool visible = false;
   String confirmedNumber = '';
   final _dineEasyRepository = DineEasyRepository();
 
@@ -34,7 +34,6 @@ class ReservePupUpState extends State<ReservePupUp> {
 
   onValidPhoneNumber(String number, String internationalizedPhoneNumber, String isoCode) {
     setState(() {
-      visible = true;
       confirmedNumber = internationalizedPhoneNumber;
     });
   }
@@ -84,31 +83,15 @@ class ReservePupUpState extends State<ReservePupUp> {
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     WhitelistingTextInputFormatter.digitsOnly //TODO add min max formater
-                  ], // Only numbers can be entered
+                  ], // Only numbers can be enteredmbers can b
+                  maxLength: 2,
                   controller: _nrOfPeopleController,
                 ),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(labelText: "Time of reservation"),
-                  value: selectedTime,
-                  //isExpanded: true,
-                  items: _restaurant.availableTimes
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Align(
-                                alignment: FractionalOffset.center,
-                                child: Text(
-                                  "${(e / 60).toInt()}:${e % 60}",
-                                  style: TextStyle(color: Colors.black),
-                                )),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedTime = value;
-                    });
-                  },
-                  hint: Align(alignment: FractionalOffset.center, child: Text("Select city")),
-                ),
+                //TODO figure out better way to cast this
+                DEDropDownButton("Time of reservation", selectedTime, _restaurant.availableTimes, <any>(Object i) {
+                  int s = int.parse(i.toString());
+                  return "${(s / 60).toInt()}:${s % 60}";
+                })
               ],
             );
           }
@@ -143,10 +126,6 @@ class ReservePupUpState extends State<ReservePupUp> {
                   setState(() {
                     reservationFuture = _dineEasyRepository.makeReservation(phoneNumber, _nameController.value, _nrOfPeopleController.value, selectedTime);
                     //TODO solve case when widget is closed
-
-                    reservationFuture.whenComplete(() {
-                      print("done");
-                    });
                   });
                 },
               )

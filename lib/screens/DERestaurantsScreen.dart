@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:thesis/models/Filters.dart';
 import 'package:thesis/models/Restaurant.dart';
@@ -19,8 +20,8 @@ class DERestaurantsScreen extends StatefulWidget {
 class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
   final _dineEasyRepository = DineEasyRepository();
 
-  bool _showFilters = false;
-  bool _areSearchCriteriaDirty = false;
+  bool _showFilters = true;
+  bool _areSearchCriteriaDirty = true;
 
   String _location;
   DateTime _dayAndTime;
@@ -28,6 +29,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
   Future<List<Restaurant>> _restaurantsFuture;
   Future<Filters> _filtersFuture;
   Filters _filters;
+  TextEditingController _nrOfPeopleController;
 
   _DERestaurantsScreenState() {
     TimeOfDay now = TimeOfDay.now();
@@ -40,6 +42,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
     DateTime today = DateTime.now();
     _dayAndTime = DateTime(today.year, today.month, today.day, hours, minutes);
     _filtersFuture = _dineEasyRepository.getFilters();
+    _nrOfPeopleController = TextEditingController(text: '2');
   }
 
   FutureBuilder buildRestaurantList(BuildContext context) {
@@ -67,7 +70,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
                 itemCount: restaurants.length,
                 itemBuilder: (BuildContext context, int index) {
                   final restaurant = restaurants[index];
-                  return DERestaurantTile(restaurant, _dayAndTime);
+                  return DERestaurantTile(restaurant, _dayAndTime, int.parse(_nrOfPeopleController.text));
                 }));
       },
     );
@@ -75,15 +78,26 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: buildFloatingButton(),
-        bottomNavigationBar: DEBottomNavigationBar(1),
-        body: SafeArea(
-          child: Container(
-              child: Stack(
-            children: <Widget>[buildRestaurantList(context), buildSearchView(context)],
+    return WillPopScope(
+      child: Scaffold(
+          floatingActionButton: buildFloatingButton(),
+          bottomNavigationBar: DEBottomNavigationBar(1),
+          body: SafeArea(
+            child: Container(
+                child: Stack(
+              children: <Widget>[buildRestaurantList(context), buildSearchView(context)],
+            )),
           )),
-        ));
+      onWillPop: () async {
+        if (_showFilters == true) {
+          setState(() {
+            _showFilters = false;
+          });
+          return false;
+        }
+        return true;
+      },
+    );
   }
 
   Widget buildSearchButton() {
@@ -145,6 +159,18 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
             }
           });
         },
+      ),
+      SizedBox(
+        width: 150,
+        child: TextField(
+          decoration: InputDecoration(labelText: "Number of people"),
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly //TODO add min max formater
+          ], // Only numbers can b
+          maxLength: 2, // e entered
+          controller: _nrOfPeopleController,
+        ),
       )
     ]);
   }
@@ -158,7 +184,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
                 opacity: _showFilters ? 1.0 : 0.0,
                 duration: Duration(milliseconds: 500),
                 child: Card(
-                    color: Colors.blueGrey,
+                    color: Theme.of(context).cardColor,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -170,13 +196,13 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
                               List<String> locations = _filters.locations;
                               return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                                 buildLocationSelector(locations),
-                                Divider(color: Colors.black),
+                                Divider(color: Theme.of(context).dividerColor),
                                 buildDateAndTimeSelectors(),
-                                Divider(color: Colors.black),
+                                Divider(color: Theme.of(context).dividerColor),
                                 buildWrappedFilters(_filters.prices),
-                                Divider(color: Colors.black),
+                                Divider(color: Theme.of(context).dividerColor),
                                 buildWrappedFilters(_filters.foodCategories),
-                                Divider(color: Colors.black),
+                                Divider(color: Theme.of(context).dividerColor),
                                 buildWrappedFilters(_filters.tags),
                               ]);
                             }
@@ -212,9 +238,19 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
         },
       ),
       Expanded(
-          child: DEDropDownButton("Select place", _location, locations, <String>(String l) {
-        return l.toString();
-      }, hint: "Select place"))
+          child: DEDropDownButton(
+        "Select place",
+        _location,
+        locations,
+        <String>(String l) {
+          return l.toString();
+        },
+        callback: <String>(String newValue) {
+          setState(() {
+            _areSearchCriteriaDirty = true;
+          });
+        },
+      ))
     ]);
   }
 }

@@ -9,8 +9,9 @@ class DERestaurantTile extends StatelessWidget {
   final _dineEasyRepository = DineEasyRepository();
   Restaurant _restaurant;
   DateTime _dayAndTime;
+  int _nrOfPeople;
 
-  DERestaurantTile(this._restaurant, this._dayAndTime);
+  DERestaurantTile(this._restaurant, this._dayAndTime, this._nrOfPeople);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +40,14 @@ class DERestaurantTile extends StatelessWidget {
       ),
       title: Text(
         _restaurant.name,
-        style: TextStyle(color: Colors.black),
+        style: Theme.of(context).textTheme.title,
       ),
       subtitle: Text(
         _restaurant.address,
-        style: TextStyle(color: Colors.black87),
+        style: Theme.of(context).textTheme.subtitle,
       ),
       trailing: FutureBuilder(
-        future: _dineEasyRepository.getRestaurantAvailability(restaurant: _restaurant, dayAndTime: _dayAndTime),
+        future: _dineEasyRepository.getRestaurantAvailability(restaurant: _restaurant, dayAndTime: _dayAndTime, nrOfPeople: _nrOfPeople),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Text('Cheking availability...', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.w600));

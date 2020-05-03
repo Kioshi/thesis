@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'DEApp.dart';
+import 'application/DEApp.dart';
 
 void main() {
   runApp(DEApp());

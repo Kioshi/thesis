@@ -6,16 +6,15 @@ import 'package:thesis/repositories/DineEasyRepository.dart';
 import 'package:thesis/widgets/DEBottomNavigationBar.dart';
 import 'package:thesis/widgets/ReservePopUp.dart';
 
-List<BoxShadow> customShadow = [
-  BoxShadow(color: Colors.white.withOpacity(0.5), spreadRadius: -5, offset: Offset(-5, -5), blurRadius: 10),
-  BoxShadow(color: Colors.green[900].withOpacity(0.2), spreadRadius: 2, offset: Offset(5, 5), blurRadius: 5),
-];
-
 class DERestaurantScreen extends StatelessWidget {
   static const routeName = '/restaurant';
 
   @override
   Widget build(BuildContext context) {
+    final List<BoxShadow> customShadow = [
+      BoxShadow(color: Theme.of(context).focusColor, spreadRadius: 2, offset: Offset(5, 5), blurRadius: 5),
+    ];
+
     Restaurant restaurant = ModalRoute.of(context).settings.arguments as Restaurant;
     final _dineEasyRepository = DineEasyRepository();
     return Scaffold(
@@ -56,7 +55,8 @@ class DERestaurantScreen extends StatelessWidget {
                                     width: MediaQuery.of(context).size.width / 3.0,
                                     height: 20,
                                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                                    decoration: BoxDecoration(color: Colors.white, boxShadow: customShadow, borderRadius: BorderRadius.circular(10)),
+                                    decoration:
+                                        BoxDecoration(color: Theme.of(context).cardColor, boxShadow: customShadow, borderRadius: BorderRadius.circular(10)),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[buildDaysWidget(offer.days), buildDiscountWidget(offer.discount), buildAvailableWidget(offer.days)],

@@ -30,12 +30,8 @@ class ToggleTextState extends State<ToggleText> {
         }*/
             },
         child: Card(
-            color: _item.enabled ? Colors.lightGreen : Colors.grey,
+            color: _item.enabled ? Theme.of(context).primaryColorDark : Theme.of(context).disabledColor,
             child: Padding(
-                padding: EdgeInsets.all(4.0),
-                child: Text(_item.text,
-                    style: _item.enabled
-                        ? null
-                        : TextStyle(decoration: TextDecoration.lineThrough)))));
+                padding: EdgeInsets.all(4.0), child: Text(_item.text, style: _item.enabled ? null : TextStyle(decoration: TextDecoration.lineThrough)))));
   }
 }

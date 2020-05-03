@@ -48,9 +48,7 @@ class DEBookingsState extends State<StatefulWidget> {
           future: storage.ready,
           builder: (BuildContext context, snapshot) {
             if (snapshot.data == true) {
-              data = (storage.getItem('bookings') as List)
-                  .map((i) => Booking.fromJson(i))
-                  .toList();
+              data = (storage.getItem('bookings') as List).map((i) => Booking.fromJson(i)).toList();
               return builBookingsList();
             } else {
               return Center(child: const CircularProgressIndicator());
@@ -108,17 +106,13 @@ class DEBookingsState extends State<StatefulWidget> {
               left: 0.0,
               right: 0.0,
               child: Container(
-                color: snapshot.hasError ? Color(0xFFEE4400) : Colors.orange,
+                color: snapshot.hasError ? Theme.of(context).errorColor : Theme.of(context).primaryColor,
                 child: Center(
-                  child:
-                      Text(snapshot.hasError ? "Error occured" : "Loading..."),
+                  child: Text(snapshot.hasError ? "Error occured" : "Loading..."),
                 ),
               ),
             ),
-          if (data != null)
-            builBookingsList()
-          else
-            Center(child: const CircularProgressIndicator())
+          if (data != null) builBookingsList() else Center(child: const CircularProgressIndicator())
         ]);
       },
     );
