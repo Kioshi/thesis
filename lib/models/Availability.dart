@@ -6,37 +6,40 @@ enum AvailabilityState { Open, Closed, FullyBooked, TimeSlotAvailable, TimeSlotA
 
 @JsonSerializable()
 class Availability {
-  List<NormalDay> normalDays;
-  List<SpecialDay> specialDays;
-
-  Availability({this.normalDays, this.specialDays});
+  Availability({required this.normalDays, required this.specialDays});
 
   factory Availability.fromJson(Map<String, dynamic> json) => _$AvailabilityFromJson(json);
+
   Map<String, dynamic> toJson() => _$AvailabilityToJson(this);
+
+  List<NormalDay> normalDays;
+  List<SpecialDay> specialDays;
 }
 
 @JsonSerializable()
 class NormalDay {
+  NormalDay({required this.daysMask, required this.openFrom, required this.openTill, required this.open});
+
+  factory NormalDay.fromJson(Map<String, dynamic> json) => _$NormalDayFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NormalDayToJson(this);
+
   int daysMask;
   int openFrom;
   int openTill;
   bool open;
-
-  NormalDay({this.daysMask, this.openFrom, this.openTill, this.open});
-
-  factory NormalDay.fromJson(Map<String, dynamic> json) => _$NormalDayFromJson(json);
-  Map<String, dynamic> toJson() => _$NormalDayToJson(this);
 }
 
 @JsonSerializable()
 class SpecialDay {
+  SpecialDay({required this.dates, required this.openFrom, required this.openTill, required this.open});
+
+  factory SpecialDay.fromJson(Map<String, dynamic> json) => _$SpecialDayFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SpecialDayToJson(this);
+
   List<String> dates;
   int openFrom;
   int openTill;
   bool open;
-
-  SpecialDay({this.dates, this.openFrom, this.openTill, this.open});
-
-  factory SpecialDay.fromJson(Map<String, dynamic> json) => _$SpecialDayFromJson(json);
-  Map<String, dynamic> toJson() => _$SpecialDayToJson(this);
 }

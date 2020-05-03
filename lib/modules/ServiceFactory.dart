@@ -10,10 +10,11 @@ class ServicesFactory {
     switch (bookingType) {
       case BookingTypes.DineEasyCallBooking:
         return FakeService();
-      case BookingTypes.NoBooking:
-        return null;
       case BookingTypes.EasyTableBooking:
         return EasyTableBookingService(client);
+      case BookingTypes.NoBooking:
+      default:
+        return null;
     }
   }
 }

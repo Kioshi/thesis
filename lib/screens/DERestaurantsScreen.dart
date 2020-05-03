@@ -45,7 +45,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
     _nrOfPeopleController = TextEditingController(text: '2');
   }
 
-  FutureBuilder buildRestaurantList(BuildContext context) {
+  FutureBuilder<List<Restaurant>> buildRestaurantList(BuildContext context) {
     return FutureBuilder(
       future: _restaurantsFuture,
       builder: (context, snapshot) {
@@ -137,7 +137,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
               .then((date) {
             if (date != null && date != _dayAndTime) {
               setState(() {
-                _dayAndTime = date;
+                _dayAndTime = DateTime(date.year, date.month, date.day, _dayAndTime.hour, _dayAndTime.minute);
                 _areSearchCriteriaDirty = true;
               });
             }
@@ -192,7 +192,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
                           future: _filtersFuture,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              _filters = snapshot.data;
+                              _filters = snapshot.data as Filters;
                               List<String> locations = _filters.locations;
                               return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                                 buildLocationSelector(locations),
@@ -226,7 +226,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
   }
 
   Widget buildWrappedFilters(List<TogglableItem> data) {
-    return Wrap(children: data.map((item) => ToggleText(item, callback: () => {})).toList());
+    return Wrap(children: data.map((item) => ToggleText(item)).toList());
   }
 
   Widget buildLocationSelector(List<String> locations) {

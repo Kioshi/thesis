@@ -6,7 +6,8 @@ part of 'Restaurant.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Restaurant _$RestaurantFromJson(Map<String, dynamic> json) {
+Restaurant _$RestaurantFromJson(Map<String, dynamic> json)
+{
   return Restaurant(
     id: json['id'] as int,
     name: json['name'] as String,
@@ -24,20 +25,23 @@ Restaurant _$RestaurantFromJson(Map<String, dynamic> json) {
     longitude: json['longitude'] as int,
     capacity: json['capacity'] as int,
     foodCategories:
-        (json['foodCategories'] as List)?.map((e) => e as String)?.toList(),
+    (json['foodCategories'] as List)?.map((dynamic e)
+                                          => e as String)?.toList(),
     bookingType:
-        _$enumDecodeNullable(_$BookingTypesEnumMap, json['bookingType']),
+    _$enumDecodeNullable(_$BookingTypesEnumMap, json['bookingType']),
     availability: json['availability'] == null
-        ? null
-        : Availability.fromJson(json['availability'] as Map<String, dynamic>),
-  )
+                  ? null
+                  : Availability.fromJson(json['availability'] as Map<String, dynamic>),
+    )
     ..availabilityState = _$enumDecodeNullable(
         _$AvailabilityStateEnumMap, json['availabilityState'])
     ..availableTimes =
-        (json['availableTimes'] as List)?.map((e) => e as int)?.toList();
+    (json['availableTimes'] as List)?.map((dynamic e)
+                                          => e as int)?.toList();
 }
 
-Map<String, dynamic> _$RestaurantToJson(Restaurant instance) =>
+Map<String, dynamic> _$RestaurantToJson(Restaurant instance)
+=>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -58,37 +62,42 @@ Map<String, dynamic> _$RestaurantToJson(Restaurant instance) =>
       'bookingType': _$BookingTypesEnumMap[instance.bookingType],
       'availability': instance.availability,
       'availabilityState':
-          _$AvailabilityStateEnumMap[instance.availabilityState],
+      _$AvailabilityStateEnumMap[instance.availabilityState],
       'availableTimes': instance.availableTimes,
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
+T _$enumDecode<T>(Map<T, dynamic> enumValues,
+                  dynamic source, {
+                    T unknownValue,
+                  })
+{
+  if (source == null)
+  {
     throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+                            '${enumValues.values.join(', ')}');
   }
 
   final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
+      .singleWhere((e)
+                   => e.value == source, orElse: ()
+  => null)
       ?.key;
 
-  if (value == null && unknownValue == null) {
+  if (value == null && unknownValue == null)
+  {
     throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
+                            '${enumValues.values.join(', ')}');
   }
   return value ?? unknownValue;
 }
 
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
+T _$enumDecodeNullable<T>(Map<T, dynamic> enumValues,
+                          dynamic source, {
+                            T unknownValue,
+                          })
+{
+  if (source == null)
+  {
     return null;
   }
   return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);

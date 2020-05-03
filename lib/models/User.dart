@@ -8,8 +8,9 @@ class User {
   final String name;
   final String phoneNr;
 
-  User({this.id, this.name, this.phoneNr});
+  User({required this.id, required this.name, required this.phoneNr});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }

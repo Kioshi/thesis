@@ -4,8 +4,8 @@ import 'package:thesis/screens/DERestaurantsScreen.dart';
 import 'package:thesis/screens/DEUserScreen.dart';
 
 class DEBottomNavigationBar extends StatelessWidget {
-  int _currentIndex;
-  bool backOnSameIndex;
+  final int _currentIndex;
+  final bool backOnSameIndex;
 
   DEBottomNavigationBar(this._currentIndex, {this.backOnSameIndex = false});
 
@@ -22,16 +22,13 @@ class DEBottomNavigationBar extends StatelessWidget {
         }
         switch (index) {
           case 0:
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                DEBookingsScreen.routeName, (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(DEBookingsScreen.routeName, (Route<dynamic> route) => false);
             break;
           case 1:
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                DERestaurantsScreen.routeName, (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(DERestaurantsScreen.routeName, (Route<dynamic> route) => false);
             break;
           case 2:
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                DEUserScreen.routeName, (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(DEUserScreen.routeName, (Route<dynamic> route) => false);
             break;
         }
       },

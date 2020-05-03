@@ -8,38 +8,15 @@ part 'Restaurant.g.dart';
 
 @JsonSerializable()
 class Restaurant {
-  int id;
-  String name;
-  String address;
-  String type;
-  int postalCode;
-  String website;
-  String menuURL;
-  String description;
-  String publicEmail;
-  int publicPhone;
-  int publicPhoneCountryCode;
-  String city;
-  int latitude;
-  int longitude;
-  int capacity;
-  List<String> foodCategories;
-  BookingTypes bookingType;
-  Availability availability;
-
-  // Internal state variables
-  AvailabilityState availabilityState = AvailabilityState.Open;
-  List<int> availableTimes;
-
   Restaurant(
-      {this.id,
-      this.name,
-      this.address,
-      this.type,
+      {required this.id,
+      required this.name,
+      required this.address,
+      required this.type,
       this.postalCode,
       this.website,
       this.menuURL,
-      this.description,
+      required this.description,
       this.publicEmail,
       this.publicPhone,
       this.publicPhoneCountryCode,
@@ -48,25 +25,27 @@ class Restaurant {
       this.longitude,
       this.capacity,
       this.foodCategories,
-      this.bookingType,
-      this.availability});
+      required this.bookingType,
+      required this.availability});
 
-  Restaurant.test(int i) {
+  Restaurant.test(int i)
+      : address = 'Addr $i',
+        id = i,
+        name = 'Resturant $i',
+        type = 'Type $i',
+        this.availabilityState = AvailabilityState.Open,
+        this.bookingType = BookingTypes.EasyTableBooking,
+        this.availability = Availability(normalDays: [
+          NormalDay(daysMask: 31, openFrom: 600, openTill: 1800, open: true),
+          NormalDay(daysMask: 96, openFrom: 300, openTill: 600, open: true)
+        ], specialDays: [
+          SpecialDay(dates: ['2020-04-03'], open: true, openFrom: 0, openTill: 1440)
+        ]) {
     Random random = Random();
-    this.id = i;
-    this.name = "Resturant $i";
-    this.address = "Addr $i";
-    this.type = "Type $i";
     this.bookingType = random.nextInt(1) == 0 ? BookingTypes.EasyTableBooking : BookingTypes.DineEasyCallBooking;
-    this.availabilityState = AvailabilityState.Open;
-    this.availability = Availability(normalDays: [
-      NormalDay(daysMask: 31, openFrom: 600, openTill: 1800, open: true),
-      NormalDay(daysMask: 96, openFrom: 300, openTill: 600, open: true)
-    ], specialDays: [
-      SpecialDay(dates: ["2020-04-03"], open: true, openFrom: 0, openTill: 1440)
-    ]);
+
     if (i % 5 == 0) {
-      this.availableTimes = List.generate(20, (i) {
+      this.availableTimes = List.generate(20, (int i) {
         return 600 + random.nextInt(1200);
       });
     }
@@ -80,4 +59,27 @@ Mauris tincidunt sem sed arcu. In convallis. Cum sociis natoque penatibus et mag
   factory Restaurant.fromJson(Map<String, dynamic> json) => _$RestaurantFromJson(json);
 
   Map<String, dynamic> toJson() => _$RestaurantToJson(this);
+
+  int id;
+  String name;
+  String address;
+  String type;
+  int? postalCode;
+  String? website;
+  String? menuURL;
+  String? description;
+  String? publicEmail;
+  int? publicPhone;
+  int? publicPhoneCountryCode;
+  String? city;
+  int? latitude;
+  int? longitude;
+  int? capacity;
+  List<String>? foodCategories;
+  BookingTypes bookingType;
+  Availability availability;
+
+  // Internal state variables
+  AvailabilityState availabilityState = AvailabilityState.Open;
+  List<int>? availableTimes;
 }

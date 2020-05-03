@@ -22,8 +22,8 @@ class FakeService extends BaseService {
   }
 
   @override
-  Future<List<int>> parseTimes(String times) {
-    return json.decode(times).cast<int>();
+  Future<List<int>> parseTimes(String times) async {
+    return (json.decode(times) as List).map((dynamic i) => int.parse(i.toString().trim())).toList();
   }
 
   int next(int min, int max) => min + _random.nextInt(max - min);

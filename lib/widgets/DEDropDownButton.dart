@@ -4,11 +4,11 @@ typedef ToStringFunction = String Function<T>(T);
 typedef OnSelectedCallback = void Function<T>(T);
 
 class DEDropDownButton<T> extends StatefulWidget {
-  String label;
-  T selectedValue;
-  List<T> values;
-  ToStringFunction toStringFunction;
-  OnSelectedCallback callback;
+  final String label;
+  final T selectedValue;
+  final List<T> values;
+  final ToStringFunction toStringFunction;
+  final OnSelectedCallback callback;
 
   DEDropDownButton(this.label, this.selectedValue, this.values, this.toStringFunction, {this.callback});
 
@@ -44,11 +44,13 @@ class DEDropDownButtonState<T> extends State<DEDropDownButton> {
                       )),
                 ))
             .toList(),
-        onChanged: (value) {
+        onChanged: (T value) {
           setState(() {
             selectedValue = value;
           });
-          callback(value);
+          if (callback != null) {
+            callback(value);
+          }
         });
   }
 }

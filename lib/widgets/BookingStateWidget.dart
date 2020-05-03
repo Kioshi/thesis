@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thesis/models/Booking.dart';
 
 class BookingStateWidget extends StatelessWidget {
-  BookingState _state;
+  final BookingState _state;
 
   BookingStateWidget(this._state);
 

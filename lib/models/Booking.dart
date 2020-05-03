@@ -19,7 +19,15 @@ class Booking {
 
   //final BelongsTo<Restaurant> restaurant;
 
-  Booking({this.id, this.date, this.nrOfPeople, this.discount, this.name, this.phoneNr, this.state, this.restaurantName});
+  Booking(
+      {required this.id,
+      required this.date,
+      required this.nrOfPeople,
+      required this.discount,
+      required this.name,
+      required this.phoneNr,
+      required this.state,
+      required this.restaurantName});
 
   factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
 

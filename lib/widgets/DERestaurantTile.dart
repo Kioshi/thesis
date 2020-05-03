@@ -7,9 +7,9 @@ import 'package:thesis/screens/DERestaurantScreen.dart';
 
 class DERestaurantTile extends StatelessWidget {
   final _dineEasyRepository = DineEasyRepository();
-  Restaurant _restaurant;
-  DateTime _dayAndTime;
-  int _nrOfPeople;
+  final Restaurant _restaurant;
+  final DateTime _dayAndTime;
+  final int _nrOfPeople;
 
   DERestaurantTile(this._restaurant, this._dayAndTime, this._nrOfPeople);
 
@@ -53,7 +53,7 @@ class DERestaurantTile extends StatelessWidget {
             return Text('Cheking availability...', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.w600));
           }
 
-          AvailabilityState state = snapshot.data;
+          AvailabilityState state = snapshot.data as AvailabilityState;
 
           return Text('${state.toString().substring(18)}', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.w600));
         },

@@ -25,6 +25,7 @@ class DEBookingsState extends State<StatefulWidget> {
 
   @override
   void initState() {
+    super.initState();
     bookingsFuture = _dineEasyRepository.getBookings();
   }
 
@@ -48,7 +49,7 @@ class DEBookingsState extends State<StatefulWidget> {
           future: storage.ready,
           builder: (BuildContext context, snapshot) {
             if (snapshot.data == true) {
-              data = (storage.getItem('bookings') as List).map((i) => Booking.fromJson(i)).toList();
+              data = (storage.getItem('bookings') as List).map((dynamic i) => Booking.fromJson(i as Map<String, dynamic>)).toList();
               return builBookingsList();
             } else {
               return Center(child: const CircularProgressIndicator());
@@ -96,7 +97,7 @@ class DEBookingsState extends State<StatefulWidget> {
       future: bookingsFuture,
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData == true) {
-          data = snapshot.data;
+          data = snapshot.data as List<Booking>;
           storage.setItem("bookings", data);
         }
         return Stack(fit: StackFit.expand, children: [

@@ -42,7 +42,7 @@ class DERestaurantScreen extends StatelessWidget {
                       future: _dineEasyRepository.getOffers(restaurant),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          List<Offer> offers = snapshot.data;
+                          List<Offer> offers = snapshot.data as List<Offer>;
                           return ListView.builder(
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
@@ -81,22 +81,23 @@ class DERestaurantScreen extends StatelessWidget {
         ));
   }
 
-  void _showDialog(BuildContext context, Restaurant restaurant) {
+  Future<void> _showDialog(BuildContext context, Restaurant restaurant) async {
     if (restaurant.availableTimes == null) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No time available for booking"),
       ));
       return;
     }
-    showDialog(
+    final Future<Widget> dialog = showDialog(
       context: context,
       builder: (BuildContext context) {
         return ReservePupUp(restaurant);
       },
     );
+    await dialog;
   }
 
-  buildDaysWidget(int days) {
+  Widget buildDaysWidget(int days) {
     List<String> names = ["Mo,", "Tue,", "We,", "Thu,", "Fri,", "Sa,", "Su,"];
     if (days == 1 + 2 + 4 + 8 + 16 + 32 + 64) {
       return Text("Everyday");
@@ -110,7 +111,7 @@ class DERestaurantScreen extends StatelessWidget {
     return Text(text.substring(0, text.length - 1));
   }
 
-  buildDiscountWidget(int discount) {
+  Widget buildDiscountWidget(int discount) {
     if (discount == 0) {
       return Text("Regular booking");
     }
@@ -118,7 +119,7 @@ class DERestaurantScreen extends StatelessWidget {
     return Text("Discount $discount%");
   }
 
-  buildAvailableWidget(int days) {
+  Widget buildAvailableWidget(int days) {
     if ((days & (1 << DateTime.now().weekday - 1)) > 0) {
       return Text("Available", style: TextStyle(color: Colors.lightGreen));
     }

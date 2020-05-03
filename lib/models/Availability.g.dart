@@ -8,19 +8,12 @@ part of 'Availability.dart';
 
 Availability _$AvailabilityFromJson(Map<String, dynamic> json) {
   return Availability(
-    normalDays: (json['normalDays'] as List)
-        ?.map((e) =>
-            e == null ? null : NormalDay.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    specialDays: (json['specialDays'] as List)
-        ?.map((e) =>
-            e == null ? null : SpecialDay.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    normalDays: (json['normalDays'] as List)?.map((dynamic e) => e == null ? null : NormalDay.fromJson(e as Map<String, dynamic>))?.toList(),
+    specialDays: (json['specialDays'] as List)?.map((dynamic e) => e == null ? null : SpecialDay.fromJson(e as Map<String, dynamic>))?.toList(),
   );
 }
 
-Map<String, dynamic> _$AvailabilityToJson(Availability instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AvailabilityToJson(Availability instance) => <String, dynamic>{
       'normalDays': instance.normalDays,
       'specialDays': instance.specialDays,
     };
@@ -43,15 +36,14 @@ Map<String, dynamic> _$NormalDayToJson(NormalDay instance) => <String, dynamic>{
 
 SpecialDay _$SpecialDayFromJson(Map<String, dynamic> json) {
   return SpecialDay(
-    dates: (json['dates'] as List)?.map((e) => e as String)?.toList(),
+    dates: (json['dates'] as List)?.map((dynamic e) => e as String)?.toList(),
     openFrom: json['openFrom'] as int,
     openTill: json['openTill'] as int,
     open: json['open'] as bool,
   );
 }
 
-Map<String, dynamic> _$SpecialDayToJson(SpecialDay instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SpecialDayToJson(SpecialDay instance) => <String, dynamic>{
       'dates': instance.dates,
       'openFrom': instance.openFrom,
       'openTill': instance.openTill,

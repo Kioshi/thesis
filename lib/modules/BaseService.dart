@@ -4,7 +4,7 @@ import 'package:thesis/models/Restaurant.dart';
 
 @immutable
 abstract class BaseService {
-  http.Client httpClient;
+  final http.Client httpClient;
 
   BaseService(this.httpClient);
 

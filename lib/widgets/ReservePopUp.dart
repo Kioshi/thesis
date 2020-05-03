@@ -7,7 +7,7 @@ import 'package:thesis/repositories/DineEasyRepository.dart';
 import 'package:thesis/widgets/DEDropDownButton.dart';
 
 class ReservePupUp extends StatefulWidget {
-  Restaurant _restaurant;
+  final Restaurant _restaurant;
 
   ReservePupUp(this._restaurant);
 
@@ -32,13 +32,13 @@ class ReservePupUpState extends State<ReservePupUp> {
     });
   }
 
-  onValidPhoneNumber(String number, String internationalizedPhoneNumber, String isoCode) {
+  void onValidPhoneNumber(String number, String internationalizedPhoneNumber, String isoCode) {
     setState(() {
       confirmedNumber = internationalizedPhoneNumber;
     });
   }
 
-  Restaurant _restaurant;
+  final Restaurant _restaurant;
   TextEditingController _nrOfPeopleController;
   TextEditingController _nameController;
   int selectedTime;
@@ -90,7 +90,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                 //TODO figure out better way to cast this
                 DEDropDownButton("Time of reservation", selectedTime, _restaurant.availableTimes, <any>(Object i) {
                   int s = int.parse(i.toString());
-                  return "${(s / 60).toInt()}:${s % 60}";
+                  return "${s ~/ 60}:${s % 60}";
                 })
               ],
             );
@@ -104,7 +104,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                 );
               }
               if (snapshot.hasError) {
-                return Text(snapshot.error);
+                return Text(snapshot.error.toString());
               }
 
               return Text("Reservation sucessfull");

@@ -133,7 +133,7 @@ class DineEasyRepository extends BaseRepository {
     try {
       final response = await _httpClient.get("https://my-json-server.typicode.com/kioshi/thesis-mockup/bookings");
       if (response.statusCode == 200) {
-        return (json.decode(response.body) as List).map((i) => Booking.fromJson(i)).toList();
+        return (json.decode(response.body) as List).map((dynamic i) => Booking.fromJson(i as Map<String, dynamic>)).toList();
       }
     } catch (ex) {
       print(ex);
@@ -157,7 +157,7 @@ class DineEasyRepository extends BaseRepository {
 
   Future<User> getUser() async {
     await _storage.ready;
-    Map<String, dynamic> data = _storage.getItem('user');
+    Map<String, dynamic> data = _storage.getItem('user') as Map<String, dynamic>;
     User user;
     if (data == null) {
       user = User(id: 1, name: "Štěpán Martínek", phoneNr: "+4500000000");
@@ -165,7 +165,7 @@ class DineEasyRepository extends BaseRepository {
     } else {
       user = User.fromJson(data);
     }
-    return User.fromJson(_storage.getItem('user'));
+    return User.fromJson(_storage.getItem('user') as Map<String, dynamic>);
   }
 
   Future<void> updateUser(User user) async {
