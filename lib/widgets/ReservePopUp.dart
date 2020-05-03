@@ -76,7 +76,7 @@ class ReservePupUpState extends State<ReservePupUp> {
                   initialPhoneNumber: phoneNumber,
                   initialSelection: phoneIsoCode,
                   enabledCountries: ['+45', '+420'],
-                  decoration: InputDecoration(labelText: "Phone Number"),
+                  decoration: InputDecoration(labelText: "Phone Number")
                 ),
                 TextField(
                   decoration: InputDecoration(labelText: "Number of people"),

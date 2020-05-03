@@ -8,7 +8,7 @@ class Offer {
   final int days;
   final int discount;
 
-  Offer({required this.id, required this.days, required this.discount});
+  Offer({/*required*/ this.id, /*required*/ this.days, /*required*/ this.discount});
 
   factory Offer.fromJson(Map<String, dynamic> json) => _$OfferFromJson(json);
   Map<String, dynamic> toJson() => _$OfferToJson(this);

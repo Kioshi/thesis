@@ -6,5 +6,5 @@ class Filters {
   List<TogglableItem> foodCategories;
   List<TogglableItem> tags;
 
-  Filters({required this.locations, required this.prices, required this.foodCategories, required this.tags});
+  Filters({/*required*/ this.locations, /*required*/ this.prices, /*required*/ this.foodCategories, /*required*/ this.tags});
 }

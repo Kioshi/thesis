@@ -8,7 +8,7 @@ class User {
   final String name;
   final String phoneNr;
 
-  User({required this.id, required this.name, required this.phoneNr});
+  User({/*required*/ this.id, /*required*/ this.name, /*required*/ this.phoneNr});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

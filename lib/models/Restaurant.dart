@@ -9,14 +9,14 @@ part 'Restaurant.g.dart';
 @JsonSerializable()
 class Restaurant {
   Restaurant(
-      {required this.id,
-      required this.name,
-      required this.address,
-      required this.type,
+      {/*required*/ this.id,
+      /*required*/ this.name,
+      /*required*/ this.address,
+      /*required*/ this.type,
       this.postalCode,
       this.website,
       this.menuURL,
-      required this.description,
+      /*required*/ this.description,
       this.publicEmail,
       this.publicPhone,
       this.publicPhoneCountryCode,
@@ -25,8 +25,8 @@ class Restaurant {
       this.longitude,
       this.capacity,
       this.foodCategories,
-      required this.bookingType,
-      required this.availability});
+      /*required*/ this.bookingType,
+      /*required*/ this.availability});
 
   Restaurant.test(int i)
       : address = 'Addr $i',
@@ -64,22 +64,48 @@ Mauris tincidunt sem sed arcu. In convallis. Cum sociis natoque penatibus et mag
   String name;
   String address;
   String type;
-  int? postalCode;
-  String? website;
-  String? menuURL;
-  String? description;
-  String? publicEmail;
-  int? publicPhone;
-  int? publicPhoneCountryCode;
-  String? city;
-  int? latitude;
-  int? longitude;
-  int? capacity;
-  List<String>? foodCategories;
+
+  /*int?*/
+  int postalCode;
+
+  /*String?*/
+  String website;
+
+  /*String?*/
+  String menuURL;
+
+  /*String?*/
+  String description;
+
+  /*String?*/
+  String publicEmail;
+
+  /*int?*/
+  int publicPhone;
+
+  /*int?*/
+  int publicPhoneCountryCode;
+
+  /*String?*/
+  String city;
+
+  /*int?*/
+  int latitude;
+
+  /*int?*/
+  int longitude;
+
+  /*int?*/
+  int capacity;
+
+  /*List<String>?*/
+  List<String> foodCategories;
   BookingTypes bookingType;
   Availability availability;
 
   // Internal state variables
   AvailabilityState availabilityState = AvailabilityState.Open;
-  List<int>? availableTimes;
+
+  /*List<int>?*/
+  List<int> availableTimes;
 }

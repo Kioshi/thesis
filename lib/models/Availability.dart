@@ -6,7 +6,7 @@ enum AvailabilityState { Open, Closed, FullyBooked, TimeSlotAvailable, TimeSlotA
 
 @JsonSerializable()
 class Availability {
-  Availability({required this.normalDays, required this.specialDays});
+  Availability({/*required*/ this.normalDays, /*required*/ this.specialDays});
 
   factory Availability.fromJson(Map<String, dynamic> json) => _$AvailabilityFromJson(json);
 
@@ -18,7 +18,7 @@ class Availability {
 
 @JsonSerializable()
 class NormalDay {
-  NormalDay({required this.daysMask, required this.openFrom, required this.openTill, required this.open});
+  NormalDay({/*required*/ this.daysMask, /*required*/ this.openFrom, /*required*/ this.openTill, /*required*/ this.open});
 
   factory NormalDay.fromJson(Map<String, dynamic> json) => _$NormalDayFromJson(json);
 
@@ -32,7 +32,7 @@ class NormalDay {
 
 @JsonSerializable()
 class SpecialDay {
-  SpecialDay({required this.dates, required this.openFrom, required this.openTill, required this.open});
+  SpecialDay({/*required*/ this.dates, /*required*/ this.openFrom, /*required*/ this.openTill, /*required*/ this.open});
 
   factory SpecialDay.fromJson(Map<String, dynamic> json) => _$SpecialDayFromJson(json);
 
