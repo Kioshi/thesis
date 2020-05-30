@@ -8,6 +8,7 @@ part 'Restaurant.g.dart';
 
 @JsonSerializable()
 class Restaurant {
+  // Default constructor
   Restaurant(
       {/*required*/ this.id,
       /*required*/ this.name,
@@ -28,6 +29,7 @@ class Restaurant {
       /*required*/ this.bookingType,
       /*required*/ this.availability});
 
+  // Mock generator constructor
   Restaurant.test(int i)
       : address = 'Addr $i',
         id = i,

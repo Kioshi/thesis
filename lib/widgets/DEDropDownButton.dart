@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+// Function to convert dropdown data to string representation
 typedef ToStringFunction = String Function<T>(T);
+// Callback function that is called when selection is changed
 typedef OnSelectedCallback = void Function<T>(T);
 
+// Generic DropDownButton widget accepting different types of values
 class DEDropDownButton<T> extends StatefulWidget {
   final String label;
   final T selectedValue;

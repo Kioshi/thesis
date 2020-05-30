@@ -9,7 +9,6 @@ class DEApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //SystemChrome.setEnabledSystemUIOverlays([]);
     return MaterialApp(
       title: 'Dine Easy thesis prototype',
       theme: ThemeData(
@@ -24,7 +23,9 @@ class DEApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.teal,
           brightness: Brightness.dark),
+      // Home Screen
       home: DERestaurantsScreen(),
+      // List of routes for invoking by names
       routes: <String, WidgetBuilder>{
         DEBookingsScreen.routeName: (BuildContext context) => DEBookingsScreen(),
         DEBookingScreen.routeName: (BuildContext context) => DEBookingScreen(),

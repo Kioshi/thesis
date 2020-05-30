@@ -5,6 +5,7 @@ import 'package:thesis/modules/FakeService.dart';
 import 'BaseService.dart';
 import 'EasyTableBookingService.dart';
 
+// Factory class to retrieve appropriate service based on BookingType
 class ServicesFactory {
   static BaseService getService(BookingTypes bookingType, {HTTP.Client client}) {
     switch (bookingType) {

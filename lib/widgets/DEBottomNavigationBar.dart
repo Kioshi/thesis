@@ -3,6 +3,7 @@ import 'package:thesis/screens/DEBookingsScreen.dart';
 import 'package:thesis/screens/DERestaurantsScreen.dart';
 import 'package:thesis/screens/DEUserScreen.dart';
 
+// Bottom Navigation Bar, show main navigation routes with current one highlighted and clean navigator when of them is pressed or pop last if current is pressed
 class DEBottomNavigationBar extends StatelessWidget {
   final int _currentIndex;
   final bool backOnSameIndex;

@@ -8,6 +8,7 @@ import 'package:thesis/widgets/DEBottomNavigationBar.dart';
 
 import 'DEBookingScreen.dart';
 
+// List of bookings screen
 class DEBookingsScreen extends StatefulWidget {
   static const routeName = '/bookings';
 
@@ -19,7 +20,7 @@ class DEBookingsScreen extends StatefulWidget {
 
 class DEBookingsState extends State<StatefulWidget> {
   final _dineEasyRepository = DineEasyRepository();
-  final LocalStorage storage = new LocalStorage('bookings.json');
+  final LocalStorage storage = LocalStorage('bookings.json');
   List<Booking> data;
   Future<List<Booking>> bookingsFuture;
 
@@ -29,6 +30,7 @@ class DEBookingsState extends State<StatefulWidget> {
     bookingsFuture = _dineEasyRepository.getBookings();
   }
 
+  // Build function for retrieving data from local Storage
   Widget buildFromLocalData(bool isConnected) {
     return Stack(
       fit: StackFit.expand,
@@ -60,8 +62,10 @@ class DEBookingsState extends State<StatefulWidget> {
     );
   }
 
+  // Build function for building list of bookings from already retrieve data
   Widget builBookingsList() {
     return RefreshIndicator(
+        // Pull to refresh data from remote storage
         onRefresh: () async {
           data = await _dineEasyRepository.getBookings();
           setState(() {
@@ -78,6 +82,7 @@ class DEBookingsState extends State<StatefulWidget> {
               subtitle: Text(booking.date.toString()),
               trailing: BookingStateWidget(booking.state),
               onTap: () {
+                // Invoke Booking screen
                 Navigator.pushNamed(
                   context,
                   DEBookingScreen.routeName,
@@ -92,6 +97,7 @@ class DEBookingsState extends State<StatefulWidget> {
         ));
   }
 
+  // Build function for retrieving and data from remote storage
   Widget retrieveAndBuild() {
     return FutureBuilder(
       future: bookingsFuture,
@@ -119,38 +125,29 @@ class DEBookingsState extends State<StatefulWidget> {
     );
   }
 
+  // Default screen widget
   @override
   Widget build(BuildContext context) {
-    //final repository = context.read<Repository<Booking>>();
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Bookings'),
-        ),
-        bottomNavigationBar: DEBottomNavigationBar(0),
-        body: OfflineBuilder(
-          connectivityBuilder: (
-            BuildContext context,
-            ConnectivityResult connectivity,
-            Widget child,
-          ) {
-            final bool isConnected = connectivity != ConnectivityResult.none;
-            if (!isConnected) {
-              return buildFromLocalData(isConnected);
-            } else {
-              return retrieveAndBuild();
-            }
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text(
-                'There are no bottons to push :)',
-              ),
-              new Text(
-                'Just turn off your internet.',
-              ),
-            ],
-          ),
-        ));
+      appBar: AppBar(
+        title: Text('Bookings'),
+      ),
+      bottomNavigationBar: DEBottomNavigationBar(0),
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool isConnected = connectivity != ConnectivityResult.none;
+          if (!isConnected) {
+            return buildFromLocalData(isConnected);
+          } else {
+            return retrieveAndBuild();
+          }
+        },
+        child: Text('Initializing...'),
+      ),
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thesis/models/Booking.dart';
 
+// Booking state widget, showing specific text and color based on BookingState
 class BookingStateWidget extends StatelessWidget {
   final BookingState _state;
 

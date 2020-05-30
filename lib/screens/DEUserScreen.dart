@@ -17,6 +17,7 @@ class DEUserScreenState extends State<DEUserScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _phoneNrController = TextEditingController();
 
+  // Default screen layout
   @override
   Widget build(BuildContext context) {
     final _dineEasyRepository = DineEasyRepository();
@@ -37,22 +38,8 @@ class DEUserScreenState extends State<DEUserScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Card(
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: TextFormField(
-                                enabled: _enableEditting,
-                                controller: _nameController,
-                                decoration: InputDecoration(labelText: "Name"),
-                              ))),
-                      Card(
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: TextFormField(
-                                enabled: _enableEditting,
-                                controller: _phoneNrController,
-                                decoration: InputDecoration(labelText: "Phone Number"),
-                              ))),
+                      buildInputField(_enableEditting, _nameController, "Name"),
+                      buildInputField(_enableEditting, _phoneNrController, "Phone Number"),
                       FlatButton(
                         child: Text(_enableEditting ? "Save" : "Edit"),
                         onPressed: () async {
@@ -70,5 +57,19 @@ class DEUserScreenState extends State<DEUserScreen> {
               }
               return Center(child: const CircularProgressIndicator());
             }));
+  }
+
+  // Build function for Input field
+  Widget buildInputField(bool enabled, TextEditingController controller, String name) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        child: TextFormField(
+          enabled: enabled,
+          controller: controller,
+          decoration: InputDecoration(labelText: name),
+        ),
+      ),
+    );
   }
 }

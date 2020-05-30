@@ -5,6 +5,7 @@ import 'package:thesis/models/Restaurant.dart';
 import 'package:thesis/repositories/DineEasyRepository.dart';
 import 'package:thesis/screens/DERestaurantScreen.dart';
 
+// Restaurant tile showing available information and loading availability state asynchronously
 class DERestaurantTile extends StatelessWidget {
   final _dineEasyRepository = DineEasyRepository();
   final Restaurant _restaurant;
@@ -15,8 +16,6 @@ class DERestaurantTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return ListTile(
       onTap: () {
         Navigator.pushNamed(
@@ -50,7 +49,7 @@ class DERestaurantTile extends StatelessWidget {
         future: _dineEasyRepository.getRestaurantAvailability(restaurant: _restaurant, dayAndTime: _dayAndTime, nrOfPeople: _nrOfPeople),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Text('Cheking availability...', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.w600));
+            return Text('Checking availability...', style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.w600));
           }
 
           AvailabilityState state = snapshot.data as AvailabilityState;

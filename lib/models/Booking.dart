@@ -8,6 +8,7 @@ enum BookingState { requested, confirmed, canceled_by_user, canceled_by_restaura
 @JsonSerializable()
 class Booking {
   final int id;
+  // Date and time of reservation
   final DateTime date;
   final int nrOfPeople;
   final int discount;
@@ -16,8 +17,6 @@ class Booking {
   final String restaurantName;
 
   final BookingState state;
-
-  //final BelongsTo<Restaurant> restaurant;
 
   Booking(
       {/*required*/ this.id,

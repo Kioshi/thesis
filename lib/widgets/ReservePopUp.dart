@@ -6,19 +6,19 @@ import 'package:thesis/models/Restaurant.dart';
 import 'package:thesis/repositories/DineEasyRepository.dart';
 import 'package:thesis/widgets/DEDropDownButton.dart';
 
-class ReservePupUp extends StatefulWidget {
+class ReservePopUp extends StatefulWidget {
   final Restaurant _restaurant;
 
-  ReservePupUp(this._restaurant);
+  ReservePopUp(this._restaurant);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ReservePupUpState(_restaurant);
+    return ReservePopUpState(_restaurant);
   }
 }
 
-class ReservePupUpState extends State<ReservePupUp> {
+class ReservePopUpState extends State<ReservePopUp> {
   String phoneNumber;
   String phoneIsoCode;
   String confirmedNumber = '';
@@ -45,7 +45,7 @@ class ReservePupUpState extends State<ReservePupUp> {
 
   Future<Booking> reservationFuture = null;
 
-  ReservePupUpState(this._restaurant);
+  ReservePopUpState(this._restaurant);
 
   @override
   void initState() {
@@ -59,9 +59,7 @@ class ReservePupUpState extends State<ReservePupUp> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(_restaurant.name),
-      content: SingleChildScrollView(
-          // new line
-          child: Builder(
+      content: SingleChildScrollView(child: Builder(
         builder: (BuildContext context) {
           if (reservationFuture == null) {
             return Column(
@@ -72,12 +70,11 @@ class ReservePupUpState extends State<ReservePupUp> {
                   decoration: InputDecoration(labelText: "Name"),
                 ),
                 InternationalPhoneInput(
-                  onPhoneNumberChange: onPhoneNumberChange,
-                  initialPhoneNumber: phoneNumber,
-                  initialSelection: phoneIsoCode,
-                  enabledCountries: ['+45', '+420'],
-                  decoration: InputDecoration(labelText: "Phone Number")
-                ),
+                    onPhoneNumberChange: onPhoneNumberChange,
+                    initialPhoneNumber: phoneNumber,
+                    initialSelection: phoneIsoCode,
+                    enabledCountries: ['+45', '+420'],
+                    decoration: InputDecoration(labelText: "Phone Number")),
                 TextField(
                   decoration: InputDecoration(labelText: "Number of people"),
                   keyboardType: TextInputType.number,

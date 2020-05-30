@@ -10,6 +10,7 @@ import 'package:thesis/widgets/DEDropDownButton.dart';
 import 'package:thesis/widgets/DERestaurantTile.dart';
 import 'package:thesis/widgets/ToggableText.dart';
 
+// Screen with list of restaurants
 class DERestaurantsScreen extends StatefulWidget {
   static const routeName = '/restaurants';
 
@@ -20,18 +21,29 @@ class DERestaurantsScreen extends StatefulWidget {
 class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
   final _dineEasyRepository = DineEasyRepository();
 
+  // Indication if search filter should be shown (default yes, for initial search)
   bool _showFilters = true;
+  // Indication if search criteria changed and we should reload data
   bool _areSearchCriteriaDirty = true;
 
+  // Selected location
   String _location;
+  // Selected day and time
   DateTime _dayAndTime;
 
+  // Future promise of list of restaurant so we can refresh it when requirements change
   Future<List<Restaurant>> _restaurantsFuture;
+  // Future promise of filters, defined here so we can lead them when initiating rather than when opening filters
   Future<Filters> _filtersFuture;
+
+  // List of filter, later retrieved from future for simplier use
   Filters _filters;
+
+  // Controller for number of people widget
   TextEditingController _nrOfPeopleController;
 
   _DERestaurantsScreenState() {
+    // create default time 1 hour from now rounded to 10 minutes
     TimeOfDay now = TimeOfDay.now();
     int hours = now.hour + 1;
     int minutes = now.minute + (10 - now.minute % 10);
@@ -41,10 +53,13 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
     }
     DateTime today = DateTime.now();
     _dayAndTime = DateTime(today.year, today.month, today.day, hours, minutes);
+    // Initiate retrieving of filters
     _filtersFuture = _dineEasyRepository.getFilters();
+    // Default value of people
     _nrOfPeopleController = TextEditingController(text: '2');
   }
 
+  // Build restaurant list
   FutureBuilder<List<Restaurant>> buildRestaurantList(BuildContext context) {
     return FutureBuilder(
       future: _restaurantsFuture,
@@ -76,6 +91,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
     );
   }
 
+  // Build application layout
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -100,6 +116,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
     );
   }
 
+  // Build search button that will initiate refresh of restaurants if necessary
   Widget buildSearchButton() {
     return FlatButton(
         child: Text("Search for restaurants"),
@@ -114,6 +131,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
         });
   }
 
+  // Build Floating button that hides when options menu is shown
   Widget buildFloatingButton() {
     return _showFilters == true
         ? null
@@ -124,8 +142,10 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
             });
   }
 
+  // Build date, time and number of people selectors row
   Widget buildDateAndTimeSelectors() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
+      // Date selector
       RaisedButton(
         child: Text(DateFormat("yyyy-MM-dd").format(_dayAndTime)),
         onPressed: () {
@@ -144,6 +164,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
           });
         },
       ),
+      // Time selector
       RaisedButton(
         child: Text("${_dayAndTime.hour} : ${_dayAndTime.minute}"),
         onPressed: () {
@@ -160,6 +181,7 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
           });
         },
       ),
+      // Number of people selector
       SizedBox(
         width: 150,
         child: TextField(
@@ -175,7 +197,9 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
     ]);
   }
 
+  // Build Search view
   Widget buildSearchView(BuildContext context) {
+    Divider divider = Divider(color: Theme.of(context).dividerColor);
     return Align(
         alignment: FractionalOffset.bottomCenter,
         child: IgnorePointer(
@@ -196,13 +220,13 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
                               List<String> locations = _filters.locations;
                               return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                                 buildLocationSelector(locations),
-                                Divider(color: Theme.of(context).dividerColor),
+                                divider,
                                 buildDateAndTimeSelectors(),
-                                Divider(color: Theme.of(context).dividerColor),
+                                divider,
                                 buildWrappedFilters(_filters.prices),
-                                Divider(color: Theme.of(context).dividerColor),
+                                divider,
                                 buildWrappedFilters(_filters.foodCategories),
-                                Divider(color: Theme.of(context).dividerColor),
+                                divider,
                                 buildWrappedFilters(_filters.tags),
                               ]);
                             }
@@ -225,10 +249,12 @@ class _DERestaurantsScreenState extends State<DERestaurantsScreen> {
                     )))));
   }
 
+  // Helper to create wrapped widgets from list
   Widget buildWrappedFilters(List<TogglableItem> data) {
     return Wrap(children: data.map((item) => ToggleText(item)).toList());
   }
 
+  // Build location selector with button for possible geolocation sorting in future
   Widget buildLocationSelector(List<String> locations) {
     return Row(children: <Widget>[
       FlatButton(

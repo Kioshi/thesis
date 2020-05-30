@@ -16,6 +16,7 @@ class Availability {
   List<SpecialDay> specialDays;
 }
 
+// Days of the week
 @JsonSerializable()
 class NormalDay {
   NormalDay({/*required*/ this.daysMask, /*required*/ this.openFrom, /*required*/ this.openTill, /*required*/ this.open});
@@ -30,6 +31,7 @@ class NormalDay {
   bool open;
 }
 
+// Specific dates like New Years or Christmas Eve
 @JsonSerializable()
 class SpecialDay {
   SpecialDay({/*required*/ this.dates, /*required*/ this.openFrom, /*required*/ this.openTill, /*required*/ this.open});
